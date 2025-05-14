@@ -1,13 +1,19 @@
-import React from 'react'
-import LoginSignup from './Components/LoginSignup.jsx'
+import React, { useState } from "react";
+import RoleSelector from "./components/RoleSelector";
+import ValidateUser from "./components/ValidateUser";
 
-const App = () => {
+function App() {
+  const [selectedRole, setSelectedRole] = useState("");
+
   return (
-    <div>
-      <h1>Outpass Generation System</h1>
-      <LoginSignup />
+    <div className="LoginPage">
+      <h1 style={{ textAlign: "center" }}>OUTPASS GENERATION SYSTEM</h1>
+      <h3>Login Page</h3>
+      <RoleSelector selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
+      <p>Selected Role: {selectedRole || "None"}</p>
+      <ValidateUser role={selectedRole} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
