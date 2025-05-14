@@ -4,7 +4,7 @@ import LoginSignup from './Components/LoginSignup.jsx'
 const App = () => {
   return (
     <div>
-      <h1>Welcome to the App</h1>
+      <h1>Outpass Generation System</h1>
       <LoginSignup />
     </div>
   )
