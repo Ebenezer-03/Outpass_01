@@ -35,7 +35,7 @@ function WardenForm() {
         />
       </label>
       <br />
-      <button type="submit">Login</button>
+      <button className="login-button" type="submit">Login</button>
     </form>
   );
 }

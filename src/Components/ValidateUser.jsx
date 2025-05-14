@@ -3,6 +3,7 @@ import StudentForm from "./RoleForms/StudentForm";
 import ClassAdvisorForm from "./RoleForms/ClassAdvisorForm";
 import HODForm from "./RoleForms/HODForm";
 import WardenForm from "./RoleForms/WardenForm";
+import "./ValidateUser.css"; // Assuming you have some CSS styles
 
 function ValidateUser({ role }) {
   if (!role) {

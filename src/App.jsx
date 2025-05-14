@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import RoleSelector from "./components/RoleSelector";
 import ValidateUser from "./components/ValidateUser";
+import "./App.css"; // Assuming you have some CSS styles
 
 function App() {
   const [selectedRole, setSelectedRole] = useState("");
@@ -14,6 +15,7 @@ function App() {
       <ValidateUser role={selectedRole} />
     </div>
   );
+  
 }
 
 export default App;

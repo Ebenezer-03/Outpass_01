@@ -7,7 +7,7 @@ function RoleSelector({ selectedRole, setSelectedRole }) {
 
   return (
     <div className="user-role">
-      <h4>Select Your Role</h4>
+      <h5>Select Your Role</h5>
       {["Student", "Class Advisor", "HOD", "Warden"].map((role) => (
         <label key={role} style={{ marginRight: "10px" }}>
           <input

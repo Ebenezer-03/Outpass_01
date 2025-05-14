@@ -22,7 +22,7 @@ function StudentForm() {
         Date of Birth:
         <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
       </label><br></br>
-      <button type="submit">Login</button>
+      <button className = "login-button"type="submit">Login</button>
     </form>
     </div>
   );
