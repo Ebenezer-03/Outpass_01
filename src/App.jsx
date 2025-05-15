@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import RoleSelector from "./components/RoleSelector";
 import ValidateUser from "./components/ValidateUser";
+import signup from "./Components/signup";
 import "./App.css";
 
 function App() {
