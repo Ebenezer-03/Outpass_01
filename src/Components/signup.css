@@ -1,0 +1,75 @@
+/* signup.css */
+
+.signup {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.signup h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.signup h3 {
+  text-align: center;
+  color: #34495e;
+  margin-bottom: 5px;
+}
+
+.signup p {
+  text-align: center;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+}
+
+.signup label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.signup input,
+.signup select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border 0.3s ease;
+}
+
+.signup input:focus,
+.signup select:focus {
+  border-color: #2980b9;
+  outline: none;
+}
+
+.signup .username,
+.signup .role {
+  margin-bottom: 20px;
+}
+
+.signup button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2980b9;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup button:hover {
+  background-color: #1f6391;
+}

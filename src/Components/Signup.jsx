@@ -13,19 +13,30 @@ function Signup() {
     return (
         <div className='signup'>
             <h2>Outpass Management System - Sign Up</h2>
-            <div className='role'>
-                <label htmlFor="role">Select Role:</label>
-                <select id="role" value={username} onChange={handleRoleChange}>
-                    <option value="">-- Select Role --</option>
-                    <option value="Student">Student</option>
-                    <option value="Class Advisor">Class Advisor</option>
-                    <option value="HOD">HOD</option>
-                    <option value="Warden">Warden</option>
-                </select>
-            </div>
-            <div>
-                <ValidateUser role={username} />
-            </div>
+            <h3>Sign Up Page</h3>
+            <p>Create Your Account</p>
+        <div className='username'>
+            <label htmlFor="username">Username:</label>
+            <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+        </div>
+        <div className='role'>
+            <label htmlFor="role">Select Role:</label>
+            <select id="role" value={username} onChange={handleRoleChange}>
+                <option value="">-- Select Role --</option>
+                <option value="Student">Student</option>
+                <option value="Class Advisor">Class Advisor</option>
+                <option value="HOD">HOD</option>
+                <option value="Warden">Warden</option>
+            </select>
+        </div>
+        <div>
+            <ValidateUser role={username} />
+        </div>
         </div>
     );
 }
