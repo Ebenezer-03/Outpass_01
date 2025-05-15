@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RoleSelector from "./components/RoleSelector";
 import ValidateUser from "./components/ValidateUser";
-import "./App.css"; // Assuming you have some CSS styles
+import "./App.css";
 
 function App() {
   const [selectedRole, setSelectedRole] = useState("");
