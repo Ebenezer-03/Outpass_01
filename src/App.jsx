@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import RoleSelector from "./components/RoleSelector";
 import ValidateUser from "./components/ValidateUser";
-import Signup from "./components/signup";
 import "./App.css";
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
       <RoleSelector selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
       <p>Selected Role: {selectedRole || "None"}</p>
       <ValidateUser role={selectedRole} />
-      <Signup />
     </div>
   );
   
