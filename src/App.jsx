@@ -13,6 +13,7 @@ function App() {
       <RoleSelector selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
       <p>Selected Role: {selectedRole || "None"}</p>
       <ValidateUser role={selectedRole} />
+      
     </div>
   );
   

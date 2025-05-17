@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function RoleSelector({ selectedRole, setSelectedRole }) {
+  let color = "black";
   const handleRoleChange = (event) => {
     setSelectedRole(event.target.value);
   };
@@ -20,6 +22,7 @@ function RoleSelector({ selectedRole, setSelectedRole }) {
           
         </label>
       ))}
+      
     </div>
   );
 }
