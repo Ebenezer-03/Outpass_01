@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./WardenDashboard.css";
+import "./Warden.css";
 import { FaCheck, FaTimes, FaClock, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const WardenDashboard = () => {
@@ -131,7 +131,7 @@ const WardenDashboard = () => {
       <div>
         {renderTable(
           requests[tab],
-          ${tab.charAt(0).toUpperCase() + tab.slice(1)} On
+          `${tab.charAt(0).toUpperCase() + tab.slice(1)} On`
         )}
       </div>
     </div>
