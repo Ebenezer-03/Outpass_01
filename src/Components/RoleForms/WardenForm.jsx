@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function WardenForm() {
   const [wardenId, setWardenId] = useState("");
   const [floor, setFloor] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -10,6 +12,7 @@ function WardenForm() {
     console.log("Warden ID:", wardenId);
     console.log("Floor In Charge:", floor);
     // Add validation logic here
+    navigate("/warden-dashboard");
   };
 
   return (

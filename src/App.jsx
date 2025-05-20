@@ -5,6 +5,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StudentDashboard from "./Components/Dashboard/StudentDashboard";
 import ClassAdvisorDashboard from "./Components/Dashboard/ClassAdvisorDashboard";
+import WardenDashboard from "./Components/Dashboard/WardenDashboard";
 
 function App() {
   const [selectedRole, setSelectedRole] = useState("");
@@ -26,6 +27,7 @@ function App() {
         />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         <Route path="/class-advisor-dashboard" element={<ClassAdvisorDashboard />} />
+        <Route path="/warden-dashboard" element={<WardenDashboard />} />
       </Routes>
     </BrowserRouter>
   );

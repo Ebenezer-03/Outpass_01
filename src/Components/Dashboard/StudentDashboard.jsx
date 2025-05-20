@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Student.css";
 
 const generateUniqueId = () => {
@@ -7,14 +8,12 @@ const generateUniqueId = () => {
   return `REQ-${timestamp}-${random}`;
 };
 
+const STORAGE_KEY = "student_outpass_requests";
+const INITIAL_REQUESTS = { pending: [], approved: [], rejected: [] };
+
 const StudentDashboard = () => {
   const [tab, setTab] = useState("pending");
-  const [requests, setRequests] = useState({
-    pending: [],
-    approved: [],
-    rejected: [],
-  });
-
+  const [requests, setRequests] = useState(INITIAL_REQUESTS);
   const [formData, setFormData] = useState({
     Reason: "",
     outDate: "",
@@ -24,6 +23,22 @@ const StudentDashboard = () => {
   const [studentClass, setStudentClass] = useState("10th Grade");
   const [showForm, setShowForm] = useState(false);
   const [viewDetails, setViewDetails] = useState(null);
+  const navigate = useNavigate();
+
+  // Load requests from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setRequests(JSON.parse(stored));
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_REQUESTS));
+    }
+  }, []);
+
+  // Save requests to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(requests));
+  }, [requests]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,18 +54,22 @@ const StudentDashboard = () => {
     };
     setRequests((prev) => ({
       ...prev,
-      [tab]: [...prev[tab], newRequest],
+      pending: [...prev.pending, newRequest], // Always add to pending
     }));
     setFormData({ Reason: "", outDate: "", returnDate: "" });
     setShowForm(false);
   };
-  const deleteRequest = (requestId) => {
-  setRequests((prev) => ({
-    ...prev,
-    [tab]: prev[tab].filter((req) => req.requestId !== requestId),
-  }));
-};
 
+  const deleteRequest = (requestId) => {
+    setRequests((prev) => ({
+      ...prev,
+      [tab]: prev[tab].filter((req) => req.requestId !== requestId),
+    }));
+  };
+
+  const handleLogout = () => {
+    navigate("/");
+  };
 
   const renderTable = (data, statusLabel) => (
     <div className="table-container" style={{ opacity: viewDetails ? 0.2 : 1 }}>
@@ -67,7 +86,7 @@ const StudentDashboard = () => {
         </thead>
         <tbody>
           {data.map((req, idx) => (
-            <tr key={idx}>
+            <tr key={req.requestId}>
               <td>{req.requestId}</td>
               <td>{req.Reason}</td>
               <td>{req.outDate}</td>
@@ -95,10 +114,11 @@ const StudentDashboard = () => {
     </div>
   );
 
-  
-
   return (
     <div className="student-dashboard">
+      <button className="logout-btn" onClick={handleLogout} title="Logout">
+        Logout
+      </button>
       <div className="header-box">
         <h1 className="dashboard-title">Outpass Generation System</h1>
         <h2 className="dashboard-subtitle">Student Dashboard</h2>

@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Class.css';
+
+const STORAGE_KEY = "student_outpass_requests";
 
 const ClassAdvisorDashboard = () => {
   const [tab, setTab] = useState('pending');
@@ -9,74 +12,54 @@ const ClassAdvisorDashboard = () => {
     department: "Computer Science",
     classHandled: "CS 3rd Year"
   });
-
-  // Mock data - replace with actual API calls later
   const [outpassRequests, setOutpassRequests] = useState({
-    pending: [
-      {
-        id: 1,
-        studentName: "John Doe",
-        rollNumber: "CS2023001",
-        reason: "Family Emergency",
-        fromDate: "2024-03-20",
-        toDate: "2024-03-22",
-        status: "pending",
-        timestamp: "2024-03-19 10:30 AM"
-      },
-      {
-        id: 2,
-        studentName: "Jane Smith",
-        rollNumber: "CS2023002",
-        reason: "Medical Appointment",
-        fromDate: "2024-03-21",
-        toDate: "2024-03-21",
-        status: "pending",
-        timestamp: "2024-03-19 11:45 AM"
-      }
-    ],
-    approved: [
-      {
-        id: 3,
-        studentName: "Mike Johnson",
-        rollNumber: "CS2023003",
-        reason: "Interview",
-        fromDate: "2024-03-18",
-        toDate: "2024-03-18",
-        status: "approved",
-        timestamp: "2024-03-17 09:15 AM"
-      }
-    ],
-    rejected: [
-      {
-        id: 4,
-        studentName: "Sarah Wilson",
-        rollNumber: "CS2023004",
-        reason: "Personal Work",
-        fromDate: "2024-03-15",
-        toDate: "2024-03-16",
-        status: "rejected",
-        timestamp: "2024-03-14 02:30 PM"
-      }
-    ]
+    pending: [],
+    approved: [],
+    rejected: [],
   });
+  const navigate = useNavigate();
 
-  const handleApprove = (id) => {
-    const request = outpassRequests.pending.find(req => req.id === id);
+  // Function to load requests from localStorage
+  const loadRequests = () => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setOutpassRequests(JSON.parse(stored));
+    }
+  };
+
+  // Load requests from localStorage on mount and when window regains focus
+  useEffect(() => {
+    loadRequests();
+    window.addEventListener('focus', loadRequests);
+    return () => window.removeEventListener('focus', loadRequests);
+  }, []);
+
+  // Save requests to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(outpassRequests));
+  }, [outpassRequests]);
+
+  const handleLogout = () => {
+    navigate('/');
+  };
+
+  const handleApprove = (requestId) => {
+    const request = outpassRequests.pending.find(req => req.requestId === requestId);
     if (request) {
       setOutpassRequests(prev => ({
         ...prev,
-        pending: prev.pending.filter(req => req.id !== id),
+        pending: prev.pending.filter(req => req.requestId !== requestId),
         approved: [...prev.approved, { ...request, status: 'approved' }]
       }));
     }
   };
 
-  const handleReject = (id) => {
-    const request = outpassRequests.pending.find(req => req.id === id);
+  const handleReject = (requestId) => {
+    const request = outpassRequests.pending.find(req => req.requestId === requestId);
     if (request) {
       setOutpassRequests(prev => ({
         ...prev,
-        pending: prev.pending.filter(req => req.id !== id),
+        pending: prev.pending.filter(req => req.requestId !== requestId),
         rejected: [...prev.rejected, { ...request, status: 'rejected' }]
       }));
     }
@@ -88,34 +71,34 @@ const ClassAdvisorDashboard = () => {
         <thead>
           <tr>
             <th>Student Name</th>
-            <th>Roll Number</th>
+            <th>Class</th>
             <th>Reason</th>
-            <th>From Date</th>
-            <th>To Date</th>
+            <th>Out Date</th>
+            <th>Return Date</th>
             <th>Submitted On</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {data.map((request) => (
-            <tr key={request.id}>
+            <tr key={request.requestId}>
               <td>{request.studentName}</td>
-              <td>{request.rollNumber}</td>
-              <td>{request.reason}</td>
-              <td>{request.fromDate}</td>
-              <td>{request.toDate}</td>
+              <td>{request.studentClass}</td>
+              <td>{request.Reason}</td>
+              <td>{request.outDate}</td>
+              <td>{request.returnDate}</td>
               <td>{request.timestamp}</td>
               <td>
                 <button 
                   className="approve-btn"
-                  onClick={() => handleApprove(request.id)}
+                  onClick={() => handleApprove(request.requestId)}
                   style={{ display: tab === 'pending' ? 'inline-block' : 'none' }}
                 >
                   Approve
                 </button>
                 <button 
                   className="reject-btn"
-                  onClick={() => handleReject(request.id)}
+                  onClick={() => handleReject(request.requestId)}
                   style={{ display: tab === 'pending' ? 'inline-block' : 'none' }}
                 >
                   Reject
@@ -143,6 +126,12 @@ const ClassAdvisorDashboard = () => {
 
   return (
     <div className="class-dashboard">
+      <button className="logout-btn" onClick={handleLogout} title="Logout">
+        Logout
+      </button>
+      <button className="logout-btn" style={{top: 70, right: 32, background: '#e0f7fa', color: '#388e3c'}} onClick={loadRequests} title="Reload">
+        Reload
+      </button>
       <div className="header-box">
         <h1 className="dashboard-title">Outpass Generation System</h1>
         <h2 className="dashboard-subtitle">Class Advisor Dashboard</h2>
@@ -214,18 +203,18 @@ const ClassAdvisorDashboard = () => {
             <div className="info-group">
               <div className="info-label">Student Information</div>
               <div className="info-value">{viewDetails.studentName}</div>
-              <div className="info-value">{viewDetails.rollNumber}</div>
+              <div className="info-value">{viewDetails.studentClass}</div>
             </div>
 
             <div className="info-group">
               <div className="info-label">Reason for Outpass</div>
-              <div className="info-value">{viewDetails.reason}</div>
+              <div className="info-value">{viewDetails.Reason}</div>
             </div>
 
             <div className="info-group">
               <div className="info-label">Duration</div>
-              <div className="info-value">From: {viewDetails.fromDate}</div>
-              <div className="info-value">To: {viewDetails.toDate}</div>
+              <div className="info-value">Out Date: {viewDetails.outDate}</div>
+              <div className="info-value">Return Date: {viewDetails.returnDate}</div>
             </div>
 
             <div className="info-group">
@@ -245,7 +234,7 @@ const ClassAdvisorDashboard = () => {
                   <button 
                     className="approve-btn"
                     onClick={() => {
-                      handleApprove(viewDetails.id);
+                      handleApprove(viewDetails.requestId);
                       setViewDetails(null);
                     }}
                     style={{ marginRight: '10px' }}
@@ -255,7 +244,7 @@ const ClassAdvisorDashboard = () => {
                   <button 
                     className="reject-btn"
                     onClick={() => {
-                      handleReject(viewDetails.id);
+                      handleReject(viewDetails.requestId);
                       setViewDetails(null);
                     }}
                   >
