@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ClassAdvisorForm() {
   const [teacherId, setTeacherId] = useState("");
   const [classHandled, setClassHandled] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -10,6 +12,7 @@ function ClassAdvisorForm() {
     console.log("Teacher ID:", teacherId);
     console.log("Class Handled:", classHandled);
     // Add validation logic here
+    navigate("/class-advisor-dashboard");
   };
 
   return (
