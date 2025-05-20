@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Warden.css";
-import { FaCheck, FaTimes, FaClock, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheck, FaTimes, FaClock, FaCheckCircle, FaTimesCircle, FaSignOutAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const WardenDashboard = () => {
+  const navigate = useNavigate();
   const [tab, setTab] = useState("pending");
   const [requests, setRequests] = useState({
     pending: [],
@@ -43,6 +45,11 @@ const WardenDashboard = () => {
       rejected: <span className="status-badge status-rejected"><FaTimesCircle /> Rejected</span>
     };
     return badges[status];
+  };
+
+  const handleLogout = () => {
+    // Add any cleanup logic here if needed
+    navigate("/");
   };
 
   const renderTable = (data, statusLabel) => (
@@ -109,8 +116,13 @@ const WardenDashboard = () => {
 
   return (
     <div className="warden-dashboard">
-      <h2>Warden Dashboard</h2>
-      <p>Review and manage student outpass requests</p>
+      <div className="dashboard-header">
+        <h2>Warden Dashboard</h2>
+        <button className="logout-button" onClick={handleLogout}>
+          <FaSignOutAlt /> Logout
+        </button>
+      </div>
+      <p>Manage and review outpass requests from students</p>
 
       <div className="tab-buttons">
         {[
