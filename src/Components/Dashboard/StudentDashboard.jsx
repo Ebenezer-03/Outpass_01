@@ -76,24 +76,17 @@ const StudentDashboard = () => {
               <td>
                 <button
                   onClick={() => setViewDetails(req)}
-                  style={{
-                    padding: "5px 10px",
-                    backgroundColor: "#007bff",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer"
-                  }}
+                  className="view-btn"
                 >
                   View
                 </button>
-                 <button
-    onClick={() => deleteRequest(req.requestId)}
-    className="delete-button"
-    style={{ marginLeft: "10px", backgroundColor: "#e74c3c", color: "white", border: "none", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
-  >
-    Delete
-  </button>
+                <button
+                  onClick={() => deleteRequest(req.requestId)}
+                  className="delete-button"
+                  style={{ marginLeft: "10px", backgroundColor: "#e74c3c", color: "white", border: "none", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
@@ -176,43 +169,75 @@ const StudentDashboard = () => {
         </div>
 
         {viewDetails && (
-          <div style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "PaleGreen",
-            padding: "40px",
-            boxShadow: "0px 0px 20px rgba(10,0,0,1)",
-            borderRadius: "20px",
-            zIndex: 1000,
-            minWidth: "300px",
-            textAlign: "center"
-          }}>
-            <h1 style={{ marginBottom: "10px", color: "Brown" }}>Request Details</h1>
-            <p><strong>Name:</strong> {viewDetails.studentName}</p>
-            <p><strong>Class:</strong> {viewDetails.studentClass}</p>
-            <p><strong>Reason:</strong> {viewDetails.Reason}</p>
-            <p><strong>Out Date:</strong> {viewDetails.outDate}</p>
-            <p><strong>Return Date:</strong> {viewDetails.returnDate}</p>
-            <p><strong>Submitted On:</strong> {viewDetails.timestamp}</p>
-            <p><strong>Current Status:</strong> {tab.charAt(0).toUpperCase() + tab.slice(1)}</p>
-            <p><strong>Request ID:</strong> {viewDetails.requestId}</p>
-            <button
-              onClick={() => setViewDetails(null)}
-              style={{
-                marginTop: "20px",
-                padding: "10px 15px",
-                backgroundColor: "#d32f2f",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer"
-              }}
-            >
-              Close
-            </button>
-          </div>
+          <>
+            <div className="modal-overlay" onClick={() => setViewDetails(null)} />
+            <div className="details-modal">
+              <h2>Request Details</h2>
+
+              {/* Approval Status Stepper */}
+              <div className="approval-stepper">
+                {[
+                  { label: 'Submitted', icon: <span style={{fontSize:'20px'}}>&#10003;</span> },
+                  { label: 'Class Advisor', icon: <span style={{fontSize:'20px'}}>&#9203;</span> },
+                  { label: 'Dept. HOD', icon: <span style={{fontSize:'20px'}}>&#9203;</span> },
+                  { label: 'Warden', icon: <span style={{fontSize:'20px'}}>&#9203;</span> }
+                ].map((step, idx) => {
+                  // Determine current step based on status
+                  // 0: Submitted, 1: Class Advisor, 2: HOD, 3: Warden
+                  let currentStep = 0;
+                  if (tab === 'pending') currentStep = 1;
+                  if (tab === 'approved') currentStep = 2;
+                  if (tab === 'rejected') currentStep = 1; // treat as stopped at advisor
+                  let stepClass = '';
+                  if (idx < currentStep) stepClass = 'completed';
+                  else if (idx === currentStep) stepClass = 'current';
+                  return (
+                    <div className={`step ${stepClass}`} key={step.label}>
+                      <div className="step-icon">{step.icon}</div>
+                      <div className="step-label">{step.label}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="info-group">
+                <div className="info-label">Student Information</div>
+                <div className="info-value">{viewDetails.studentName}</div>
+                <div className="info-value">{viewDetails.studentClass}</div>
+              </div>
+
+              <div className="info-group">
+                <div className="info-label">Reason for Outpass</div>
+                <div className="info-value">{viewDetails.Reason}</div>
+              </div>
+
+              <div className="info-group">
+                <div className="info-label">Duration</div>
+                <div className="info-value">Out: {viewDetails.outDate}</div>
+                <div className="info-value">Return: {viewDetails.returnDate}</div>
+              </div>
+
+              <div className="info-group">
+                <div className="info-label">Request Information</div>
+                <div className="info-value">Submitted On: {viewDetails.timestamp}</div>
+                <div className="info-value">
+                  Status: 
+                  <span className={`status-badge status-${tab}`}>
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  className="close-btn"
+                  onClick={() => setViewDetails(null)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>
