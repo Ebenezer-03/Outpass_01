@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function HODForm() {
   const [hodId, setHodId] = useState("");
   const [department, setDepartment] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -10,6 +12,7 @@ function HODForm() {
     console.log("HOD ID:", hodId);
     console.log("Department:", department);
     // Add validation logic here
+    navigate("/hod-dashboard");
   };
 
   return (
