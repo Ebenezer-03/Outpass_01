@@ -20,13 +20,11 @@ const StudentDashboard = () => {
     outDate: "",
     returnDate: "",
   });
-  const [studentName, setStudentName] = useState("John Doe");
-  const [studentClass, setStudentClass] = useState("10th Grade");
+  const [studentName, setStudentName] = useState(() => localStorage.getItem('studentName') || "Student");
+  const [studentDept, setStudentDept] = useState(() => localStorage.getItem('studentDept') || "Department");
   const [showForm, setShowForm] = useState(false);
   const [viewDetails, setViewDetails] = useState(null);
   const navigate = useNavigate();
-
-  // Load requests from localStorage on mount
   useEffect(() => {
     const loadRequests = () => {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -44,7 +42,6 @@ const StudentDashboard = () => {
     };
 
     loadRequests();
-    // Add event listener for storage changes
     window.addEventListener('storage', loadRequests);
     return () => window.removeEventListener('storage', loadRequests);
   }, []);
@@ -57,7 +54,7 @@ const StudentDashboard = () => {
     const newRequest = {
       ...formData,
       studentName,
-      studentClass,
+      studentDept,
       requestId: generateUniqueId(),
       timestamp: new Date().toLocaleString(),
       approvalStatus: {
@@ -66,17 +63,11 @@ const StudentDashboard = () => {
         warden: 'pending'
       }
     };
-    
-    // Get current requests from localStorage
     const currentRequests = JSON.parse(localStorage.getItem(STORAGE_KEY) || JSON.stringify(INITIAL_REQUESTS));
-    
-    // Add new request to pending
     const updatedRequests = {
       ...currentRequests,
       pending: [...currentRequests.pending, newRequest]
     };
-    
-    // Save to localStorage and state
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRequests));
     setRequests(updatedRequests);
     
@@ -85,16 +76,12 @@ const StudentDashboard = () => {
   };
 
   const deleteRequest = (requestId) => {
-    // Get current requests from localStorage
     const currentRequests = JSON.parse(localStorage.getItem(STORAGE_KEY) || JSON.stringify(INITIAL_REQUESTS));
     
-    // Remove request from current tab
     const updatedRequests = {
       ...currentRequests,
       [tab]: currentRequests[tab].filter((req) => req.requestId !== requestId)
     };
-    
-    // Save to localStorage and state
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRequests));
     setRequests(updatedRequests);
   };
@@ -123,7 +110,7 @@ const StudentDashboard = () => {
     return JSON.stringify({
       requestId: request.requestId,
       studentName: request.studentName,
-      studentClass: request.studentClass,
+      studentDept: request.studentDept,
       outDate: request.outDate,
       returnDate: request.returnDate,
       approvedBy: request.approvedBy,
@@ -202,7 +189,7 @@ const StudentDashboard = () => {
           fontWeight: "bold",
           color: "#006064"
         }}>
-          Name: {studentName} | Class: {studentClass}
+          Name: {studentName} | Dept: {studentDept}
         </div>
       </div>
 
@@ -262,32 +249,11 @@ const StudentDashboard = () => {
           <>
             <div className="modal-overlay" onClick={() => setViewDetails(null)} />
             <div className="details-modal">
-              <div className="status-stepper" style={{ background: 'yellow', color: 'black' }}>
-                <div className="stepper-step completed">
-                  <span className="stepper-icon completed">&#10003;</span>
-                  <span className="stepper-label">Submitted</span>
-                </div>
-                <div className="stepper-line" />
-                <div className="stepper-step completed">
-                  <span className="stepper-icon completed">&#10003;</span>
-                  <span className="stepper-label">Class Advisor</span>
-                </div>
-                <div className="stepper-line" />
-                <div className="stepper-step completed">
-                  <span className="stepper-icon completed">&#10003;</span>
-                  <span className="stepper-label">Dept. HOD</span>
-                </div>
-                <div className="stepper-line" />
-                <div className="stepper-step completed">
-                  <span className="stepper-icon completed">&#10003;</span>
-                  <span className="stepper-label">Warden</span>
-                </div>
-              </div>
               <h2>Request Details</h2>
               <div className="info-group">
                 <div className="info-label">Student Information</div>
                 <div className="info-value">{viewDetails.studentName}</div>
-                <div className="info-value">{viewDetails.studentClass}</div>
+                <div className="info-value">{viewDetails.studentDept}</div>
               </div>
               <div className="info-group">
                 <div className="info-label">Reason for Outpass</div>

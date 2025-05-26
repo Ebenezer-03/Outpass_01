@@ -14,8 +14,7 @@ const HODDashboard = () => {
   const [showRejectionModal, setShowRejectionModal] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const navigate = useNavigate();
-
-  // Load requests from localStorage on mount
+ // Load requests from localStorage on mount
   useEffect(() => {
     const loadRequests = () => {
       const storedRequests = localStorage.getItem(STORAGE_KEY);
